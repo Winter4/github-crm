@@ -16,7 +16,7 @@ root.render(
     <BrowserRouter>
       <Container 
         className='d-flex align-items-center justify-content-center'
-        style={ {minHeight: '80vh'} }
+        style={ {minHeight: '100vh'} }
       >
         <div style={ {maxWidth: '400px', width: '100%'} }>
           <App />

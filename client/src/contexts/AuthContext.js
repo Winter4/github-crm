@@ -10,12 +10,12 @@ export function AuthProvider({ children }) {
 
   const [user, setUser] = useState(localStorage.getItem('user'));
 
-  const login = (email, password) => {
-
+  const login = (email, pwd) => {
+    console.log(email, pwd);
   };
 
-  const register = (email, password, name) => {
-
+  const register = (name, email, pwd) => {
+    console.log(name, email, pwd);
   };
 
   const value = {
