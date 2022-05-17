@@ -25,8 +25,6 @@ router.post('/login',
         });
       }
 
-      console.log(req.body);
-
       const user = await User.findOne({ where: {'email': req.body.email} });
       if (await bcrypt.compare(req.body.password, user.password)) {
         log.info('Response for login POST with LOGINED OK', { route: req.url });

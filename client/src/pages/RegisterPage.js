@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 
 import { useAuth } from '../contexts/AuthContext';
+import AuthContainer from '../wrappers/AuthContainer';
 
 export default function RegisterPage() {
 
@@ -54,7 +55,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <>
+    <AuthContainer>
       <Card>
         <Card.Header as='h4' className='text-center p-3'>
           Sign up to GitHub CRM
@@ -103,6 +104,6 @@ export default function RegisterPage() {
       </Card>
 
       <div className='w-100 mt-2 text-center'>Already have an account? <Link to='/login'>Sign in</Link></div>
-    </>
+    </AuthContainer>
   );
 }

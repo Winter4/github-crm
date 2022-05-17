@@ -23,6 +23,9 @@ app.use((req, res, next) => {
 // handle auth routes here
 app.use('/api/auth', require('./routes/auth'));
 
+// handle data routes here
+app.use('/api/data', require('./routes/data'));
+
 // ========================================
 
 // define & call start function

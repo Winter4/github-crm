@@ -14,14 +14,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Container 
-        className='d-flex align-items-center justify-content-center'
-        style={ {minHeight: '100vh'} }
-      >
-        <div style={ {maxWidth: '400px', width: '100%'} }>
-          <App />
-        </div>
-      </Container>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

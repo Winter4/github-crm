@@ -1,3 +1,7 @@
 form > div {
   margin-bottom: 1rem;
 }
+
+.text-muted {
+  font-size: 10pt;
+}

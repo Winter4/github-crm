@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
+
 import { useAuth } from '../contexts/AuthContext';
+import AuthContainer from '../wrappers/AuthContainer';
 
 export default function LoginPage() {
 
@@ -35,7 +37,7 @@ export default function LoginPage() {
   };
 
   return (
-    <>
+    <AuthContainer>
       <Card>
         <Card.Header as='h4' className='text-center p-3'>
           Sign in to GitHub CRM
@@ -67,6 +69,6 @@ export default function LoginPage() {
       </Card>
 
       <div className='w-100 mt-2 text-center'>Need an account? <Link to='/register'>Sign up</Link></div>
-    </>
+    </AuthContainer>
   );
 }
