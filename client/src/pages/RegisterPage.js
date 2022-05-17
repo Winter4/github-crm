@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 
 import { useAuth } from '../contexts/AuthContext';
@@ -7,6 +7,8 @@ import { useAuth } from '../contexts/AuthContext';
 export default function RegisterPage() {
 
   const [error, setError] = useState(null);
+  const nav = useNavigate();
+
   const { register } = useAuth();
 
   const form = {
@@ -16,7 +18,7 @@ export default function RegisterPage() {
     passwordConf: useRef(),
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async e => {
     e.preventDefault();
 
     const user = {
@@ -42,7 +44,15 @@ export default function RegisterPage() {
     // validate password confirm
     if (user.pwdConf !== user.pwd) return setError('Passwords should be the same');
 
-    register(user.name, user.email, user.pwd);
+    try {
+      if (await register(user.name, user.email, user.pwd)) {
+        console.log('registered');
+        nav('/');
+      }
+    } catch (e) {
+      console.log('register page catch', e.message);
+      setError(e.message);
+    }
   };
 
   return (
@@ -86,7 +96,7 @@ export default function RegisterPage() {
             <Button 
               className='w-100 mt-2' 
               type='submit' 
-              onClick={e => handleRegister(e) }
+              onClick={e => handleRegister(e)}
             >
               Sign up
             </Button>

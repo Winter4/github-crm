@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import useHttp from '../hooks/httpHook';
 
 const AuthContext = React.createContext();
 
@@ -8,14 +9,43 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
 
-  const [user, setUser] = useState(localStorage.getItem('user'));
+  const [user, setUser] = useState(localStorage.getItem('userId'));
+  const { request } = useHttp();
 
-  const login = (email, pwd) => {
-    console.log(email, pwd);
+  const rememberLogin = (id, name, email) => {
+    localStorage.setItem('userId', id);
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userEmail', email);
   };
 
-  const register = (name, email, pwd) => {
-    console.log(name, email, pwd);
+  const login = async (email, pwd) => {
+    try {
+      const response = await request('/auth/login', 'post', { email, pwd });
+      console.log(response);
+    } catch (e) {
+
+    }
+  };
+
+  const register = async (name, email, password) => {
+    try {
+      let response;
+
+      try {
+        response = await request('/auth/register', 'post', { name, email, password });
+      } catch (e) {
+        console.log('auth context register catch', e.message);
+        throw e;
+      }
+    
+      rememberLogin(response.id, response.name, response.email);
+      setUser(response.id);
+
+      return true;
+      
+    } catch (e) {
+      throw e;
+    }
   };
 
   const value = {

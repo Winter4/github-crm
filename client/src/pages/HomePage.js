@@ -6,11 +6,11 @@ export default function HomePage() {
   const nav = useNavigate(); 
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem('userId');
     if (!user) nav('/login');
   });
 
   return (
-    <div>HomePage</div>
+    <div>Current user: {localStorage.getItem('userName')} {localStorage.getItem('userEmail')}</div>
   );
 }

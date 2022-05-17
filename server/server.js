@@ -1,20 +1,32 @@
 const express = require('express');
 require('dotenv').config();
+const cors = require('cors');
 
 const app = express();
 const { log } = require('./logger');
 
-const { Sequelize } = require('sequelize');
-
 // ========================================
 
+// requests body parser
 app.use(express.json({ extended: true }));
+// cors policy 
+app.use(cors());
 
+// log all income requests
+app.use((req, res, next) => {
+  log.info('New Request', { method: req.method, url: req.url, query: req.query, body: req.body });
+  next();
+});
+
+// - - - - - - - - - - - - -
+
+// handle auth routes here
 app.use('/api/auth', require('./routes/auth'));
 
 // ========================================
 
-async function start() {
+// define & call start function
+(async function start() {
 
   // run the server itself
   try {
@@ -31,26 +43,21 @@ async function start() {
     log.error(tmp, { msg: e.message });
   }
 
-  // connect to db
-  try {
-    const db = new Sequelize(process.env.DB_URI, {
-      logging: msg => log.info(msg)
-    });
-    db.authenticate().then(() => {
-      const tmp = 'Connected to DB';
+  // connect to DB
+  const { db } = require('./database/sequelize');
+  db.authenticate().then(() => {
+    const tmp = 'Connected to DB';
 
-      console.log(tmp);
-      log.info(tmp);
-    });
-  } catch (e) {
-    console.error('')
-  }
+    console.log(tmp);
+    log.info(tmp);
+  })
+  .catch(err => {
+    console.error(err);
+    log.error(err.message);
+  });
 
   // log indicator
   const tmp = 'Logging...';
-
   console.log(tmp);
   log.info(tmp);
-}
-
-start();
+}) ();
