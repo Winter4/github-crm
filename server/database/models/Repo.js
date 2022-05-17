@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
-const { db } = require('../sequelize');
 
-const Repo = db.define('repo', {
+module.exports = sequelize => sequelize.define('repo', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -13,6 +12,10 @@ const Repo = db.define('repo', {
   },
   name: {
     type: DataTypes.STRING(30),
+    allowNull: false,
+  },
+  path: {
+    type: DataTypes.STRING(),
     allowNull: false,
   },
   url: {
@@ -46,5 +49,3 @@ const Repo = db.define('repo', {
   createdAt: 'created_at',
   updatedAt: 'updated_at',
 });
-
-module.exports = Repo;

@@ -15,23 +15,68 @@ export default function HomePage() {
     if (!user) nav('/login');
   }, [user, nav]);
 
-  // - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - - -
 
-  const [error, setError] = useState(null);
+  const { addRepo, getRepos, refreshRepo } = useCRUD();
+
+  // main data state
   const [data, setData] = useState([]);
-  const { getRepo } = useCRUD();
-  
+
+  // fetch data on load
+  useEffect(() => {
+    getRepos(user).then(repos => setData(repos))
+  }, [getRepos, user, setData]);
+
+  // - - - - - - - - - - - - - - - - -
+
+  // error state
+  const [error, setError] = useState(null);
+  // reference for repo path input
   const repoPath = useRef();
 
-  const handleAdding = async e => {
+  // handler for onClick add button
+  const handleAdd = async e => {
     try {
-      if (await getRepo(user, repoPath.current.value)) {
-        console.log('posted');
+      if (await addRepo(user, repoPath.current.value)) {
+        setData(await getRepos(user));
       }
     } catch (e) {
       setError(e.message);
     }
   };
+
+  // handler for onClick refresh button
+  const handleRefresh = async (e, index) => {
+    try {
+      if (await refreshRepo(data[index].id)) {
+        setData(await getRepos(user));
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  // - - - - - - - - - - - - - - - - -
+
+  // transforming data into table row
+  const handledData = data.map((row, index) => {
+    return (
+      <tr key={index}>
+        <td>{index + 1}</td>
+        <td>{row.owner}</td>
+        <td>{row.name}</td>
+        <td>{row.url}</td>
+        <td>{row.stars}</td>
+        <td>{row.forks}</td>
+        <td>{row.issues}</td>
+        <td>{row.created}</td>
+        <td><Button onClick={e => handleRefresh(e, index)}>ref</Button></td>
+        <td><Button variant={'danger'}>del</Button></td>
+      </tr>
+    );
+  });
+
+  // - - - - - - - - - - - - - - - - -
 
   return (
     <>
@@ -57,36 +102,26 @@ export default function HomePage() {
             aria-describedby='basic-addon2'
             ref={repoPath}
           />
-          <Button variant='outline-secondary' id='button-addon2' onClick={e => handleAdding(e)}>add repo</Button>
+          <Button variant='outline-secondary' id='button-addon2' onClick={e => handleAdd(e)}>add repo</Button>
         </InputGroup>
 
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>#</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Username</th>
+              <th>Owner</th>
+              <th>Name</th>
+              <th>URL</th>
+              <th>Stars</th>
+              <th>Forks</th>
+              <th>Issues</th>
+              <th>Created</th>
+              <th>ref</th>
+              <th>del</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td colSpan={2}>Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
+            {handledData}
           </tbody>
         </Table>
       </HomeContainer>

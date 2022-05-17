@@ -11,20 +11,42 @@ export function CRUDProvider({ children }) {
 
   const { request } = useHttp();
 
-  const getRepo = async (user, path) => {
-
+  const addRepo = async (user, path) => {
     try {
-      // accept header is described in GH api
       await request('/data/repo', 'post', { user, path });
     } catch (e) {
       throw e;
     }
 
     return true;
-  }
+  };
+
+  const getRepos = async user => {
+    let response;
+
+    try {
+      response = await request('/data/repos/' + user.toString());
+    } catch (e) {
+      throw e;
+    }
+
+    return response;
+  };
+
+  const refreshRepo = async id => {
+    try {
+      await request('/data/repo/' + id, 'put');
+    } catch (e) {
+      throw e;
+    }
+
+    return true;
+  };
 
   const value = {
-    getRepo,
+    addRepo,
+    getRepos,
+    refreshRepo,
   };
 
   return (

@@ -47,7 +47,7 @@ app.use('/api/data', require('./routes/data'));
   }
 
   // connect to DB
-  const { db } = require('./database/sequelize');
+  const db = require('./database/index');
   db.authenticate().then(() => {
     const tmp = 'Connected to DB';
 
