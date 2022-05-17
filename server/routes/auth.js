@@ -9,9 +9,40 @@ const User = require('../database/models/User');
 
 // ============================================
 
-router.post('/login', async (req, res) => {
-  console.log(req.body);
-});
+router.post('/login', 
+  [
+    body('email', 'Invalid email').isEmail(),
+    body('password', 'Password length must be 6-30 symbols').isLength({ min: 6, max: 30}),
+  ],
+  async (req, res) => { 
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        log.info('Invalid signin data', { data: req.body, errors: errors.array() });
+        return res.status(400).json({
+          message: 'Invalid signin data',
+          errors: errors.array(),
+        });
+      }
+
+      console.log(req.body);
+
+      const user = await User.findOne({ where: {'email': req.body.email} });
+      if (await bcrypt.compare(req.body.password, user.password)) {
+        log.info('Response for login POST with LOGINED OK', { route: req.url });
+        return res.json({ id: user.id, name: user.name, email: user.email });  
+      }
+      else {
+        log.info('Response for login POST with NOT_LOGINED OK', { route: req.url });
+        return res.status(400).send('Unexisting account');
+      }
+
+    } catch (e) {
+      log.error(e.message, { route: req.url });
+      res.status(500).send('Server failed');
+    }
+  }
+);
 
 router.post('/register',
   [
@@ -49,7 +80,7 @@ router.post('/register',
       return res.json({ id: savedUser.id, name: savedUser.name, email: savedUser.email });
 
     } catch (e) {
-      log.error({ route: req.url, error: e.message });
+      log.error(e.message, { route: req.url });
       res.status(500).send('Server failed');
     }
   }

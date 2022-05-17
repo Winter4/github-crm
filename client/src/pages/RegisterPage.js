@@ -46,11 +46,9 @@ export default function RegisterPage() {
 
     try {
       if (await register(user.name, user.email, user.pwd)) {
-        console.log('registered');
         nav('/');
       }
     } catch (e) {
-      console.log('register page catch', e.message);
       setError(e.message);
     }
   };

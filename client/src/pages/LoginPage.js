@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function LoginPage() {
 
   const [error, setError] = useState(null);
+  const nav = useNavigate();
+
   const { login } = useAuth();
 
   const form = {
@@ -24,7 +26,9 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      await login(user.email, user.pwd);
+      if (await login(user.email, user.pwd)) {
+        nav('/');
+      }
     } catch (e) {
       setError(e.message);
     }

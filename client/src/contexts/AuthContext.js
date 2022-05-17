@@ -18,12 +18,23 @@ export function AuthProvider({ children }) {
     localStorage.setItem('userEmail', email);
   };
 
-  const login = async (email, pwd) => {
+  const login = async (email, password) => {
     try {
-      const response = await request('/auth/login', 'post', { email, pwd });
-      console.log(response);
-    } catch (e) {
+      let response;
+      
+      try {
+        response = await request('/auth/login', 'post', { email, password });
+      } catch (e) {
+        throw e;
+      }
 
+      rememberLogin(response.id, response.name, response.email);
+      setUser(response.id);
+
+      return true;
+
+    } catch (e) {
+      throw e;
     }
   };
 
@@ -34,7 +45,6 @@ export function AuthProvider({ children }) {
       try {
         response = await request('/auth/register', 'post', { name, email, password });
       } catch (e) {
-        console.log('auth context register catch', e.message);
         throw e;
       }
     
@@ -42,7 +52,7 @@ export function AuthProvider({ children }) {
       setUser(response.id);
 
       return true;
-      
+
     } catch (e) {
       throw e;
     }
