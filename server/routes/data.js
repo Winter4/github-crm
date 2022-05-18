@@ -78,7 +78,7 @@ router.get('/repos/:userId',
   async (req, res) => {
     try {
       const errors = validationResult(req);
-      if (!error.isEmpty()) {
+      if (!errors.isEmpty()) {
         log.info('Invalid user repos fetch data', { user_id: req.params.userId, errors: errors.array() });
         return res.status(400).json({
           message: 'Invalid user repos fetch data',
@@ -106,7 +106,7 @@ router.put('/repo/:repoId',
   async (req, res) => {
     try {
       const errors = validationResult(req);
-      if (!error.isEmpty()) {
+      if (!errors.isEmpty()) {
         log.info('Invalid repo refresh data', { user_id: req.params.userId, errors: errors.array() });
         return res.status(400).json({
           message: 'Invalid repo refresh data',

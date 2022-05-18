@@ -12,7 +12,7 @@ import HomeContainer from '../wrappers/HomeContainer';
 export default function HomePage() {
 
   // data manipulation funcs
-  const { addRepo, getRepos, refreshRepo, deleteRepo } = useCRUD();
+  const { loading, addRepo, getRepos, refreshRepo, deleteRepo } = useCRUD();
 
   // main data state
   const [data, setData] = useState([]);
@@ -95,8 +95,8 @@ export default function HomePage() {
         <td>{row.forks}</td>
         <td>{row.issues}</td>
         <td>{row.created}</td>
-        <td><Button onClick={e => handleRefresh(e, index)}><MdOutlineRefresh /></Button></td>
-        <td><Button onClick={e => handleDelete(e, index)} variant={'danger'}><MdDelete /></Button></td>
+        <td><Button onClick={e => handleRefresh(e, index)} disabled={loading}><MdOutlineRefresh /></Button></td>
+        <td><Button onClick={e => handleDelete(e, index)} variant={'danger'} disabled={loading}><MdDelete /></Button></td>
       </tr>
     );
   });
@@ -114,7 +114,7 @@ export default function HomePage() {
             <span className='text-muted'>{localStorage.getItem('userEmail')}</span>
           </Navbar.Text>
         </Navbar.Collapse>
-        <Button variant={'secondary'} onClick={() => logout()}>Logout</Button>
+        <Button disabled={loading} variant={'secondary'} onClick={() => logout()}>Logout</Button>
       </Navbar>
 
       <HomeContainer>
@@ -127,7 +127,7 @@ export default function HomePage() {
             aria-describedby='basic-addon2'
             ref={repoPath}
           />
-          <Button variant='outline-secondary' id='button-addon2' onClick={e => handleAdd(e)}>add repo</Button>
+          <Button disabled={loading} variant='outline-secondary' id='button-addon2' onClick={e => handleAdd(e)}>add repo</Button>
         </InputGroup>
 
         { error && <Alert className='mx-1 text-center p-1' style={{fontSize: '11pt'}} variant={'danger'}>{error}</Alert> }
@@ -143,8 +143,8 @@ export default function HomePage() {
               <th>Forks</th>
               <th>Issues</th>
               <th>Created</th>
-              <th></th>
-              <th></th>
+              <th><MdOutlineRefresh /></th>
+              <th><MdDelete /></th>
             </tr>
           </thead>
           <tbody>

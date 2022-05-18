@@ -10,7 +10,7 @@ export default function RegisterPage() {
   const [error, setError] = useState(null);
   const nav = useNavigate();
 
-  const { register } = useAuth();
+  const { loading, register } = useAuth();
 
   const form = {
     name: useRef(),
@@ -97,6 +97,7 @@ export default function RegisterPage() {
               type='submit' 
               onClick={e => handleRegister(e)}
               variant={'dark'}
+              disabled={loading}
             >
               Sign up
             </Button>

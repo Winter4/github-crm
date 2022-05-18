@@ -10,7 +10,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
 
   const [user, setUser] = useState(localStorage.getItem('userId'));
-  const { request } = useHttp();
+  const { request, loading } = useHttp();
 
   const rememberLogin = (id, name, email) => {
     localStorage.setItem('userId', id);
@@ -64,6 +64,7 @@ export function AuthProvider({ children }) {
   };
 
   const value = {
+    loading,
     user,
     logout,
     login,

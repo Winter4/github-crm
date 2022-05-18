@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const nav = useNavigate();
 
-  const { login } = useAuth();
+  const { loading, login } = useAuth();
 
   const form = {
     email: useRef(),
@@ -62,6 +62,7 @@ export default function LoginPage() {
               type='submit' 
               onClick={e => handleLogin(e)}
               variant={'dark'}
+              disabled={loading}
             >
               Sign in
             </Button>
