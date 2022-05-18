@@ -143,8 +143,8 @@ export default function HomePage() {
               <th>Forks</th>
               <th>Issues</th>
               <th>Created</th>
-              <th>ref</th>
-              <th>del</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>

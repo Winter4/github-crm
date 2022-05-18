@@ -96,6 +96,7 @@ export default function RegisterPage() {
               className='w-100 mt-2' 
               type='submit' 
               onClick={e => handleRegister(e)}
+              variant={'dark'}
             >
               Sign up
             </Button>
