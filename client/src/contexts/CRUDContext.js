@@ -43,10 +43,21 @@ export function CRUDProvider({ children }) {
     return true;
   };
 
+  const deleteRepo = async id => {
+    try {
+      await request('/data/repo/' + id, 'delete');
+    } catch (e) {
+      throw e;
+    }
+
+    return true;
+  }
+
   const value = {
     addRepo,
     getRepos,
     refreshRepo,
+    deleteRepo,
   };
 
   return (

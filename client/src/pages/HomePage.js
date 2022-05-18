@@ -17,15 +17,15 @@ export default function HomePage() {
 
   // - - - - - - - - - - - - - - - - -
 
-  const { addRepo, getRepos, refreshRepo } = useCRUD();
+  const { addRepo, getRepos, refreshRepo, deleteRepo } = useCRUD();
 
   // main data state
   const [data, setData] = useState([]);
 
-  // fetch data on load
   useEffect(() => {
-    getRepos(user).then(repos => setData(repos))
-  }, [getRepos, user, setData]);
+    console.log('effect');
+    getRepos(user).then(repos => setData(repos));
+  }, []); 
 
   // - - - - - - - - - - - - - - - - -
 
@@ -56,6 +56,16 @@ export default function HomePage() {
     }
   };
 
+  const handleDelete = async (e, index) => {
+    try {
+      if (await deleteRepo(data[index].id)) {
+        setData(await getRepos(user));
+      }
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
   // - - - - - - - - - - - - - - - - -
 
   // transforming data into table row
@@ -71,7 +81,7 @@ export default function HomePage() {
         <td>{row.issues}</td>
         <td>{row.created}</td>
         <td><Button onClick={e => handleRefresh(e, index)}>ref</Button></td>
-        <td><Button variant={'danger'}>del</Button></td>
+        <td><Button onClick={e => handleDelete(e, index)} variant={'danger'}>del</Button></td>
       </tr>
     );
   });
