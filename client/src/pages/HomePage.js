@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Navbar, Button, Table, InputGroup, FormControl } from 'react-bootstrap';
+import { Navbar, Button, Table, InputGroup, FormControl, Alert } from 'react-bootstrap';
 
 import { useAuth } from '../contexts/AuthContext';
 import { useCRUD } from '../contexts/CRUDContext';
@@ -23,7 +23,6 @@ export default function HomePage() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    console.log('effect');
     getRepos(user).then(repos => setData(repos));
   }, []); 
 
@@ -37,6 +36,7 @@ export default function HomePage() {
   // handler for onClick add button
   const handleAdd = async e => {
     try {
+      setError(null);
       if (await addRepo(user, repoPath.current.value)) {
         setData(await getRepos(user));
       }
@@ -48,6 +48,7 @@ export default function HomePage() {
   // handler for onClick refresh button
   const handleRefresh = async (e, index) => {
     try {
+      setError(null);
       if (await refreshRepo(data[index].id)) {
         setData(await getRepos(user));
       }
@@ -58,6 +59,7 @@ export default function HomePage() {
 
   const handleDelete = async (e, index) => {
     try {
+      setError(null);
       if (await deleteRepo(data[index].id)) {
         setData(await getRepos(user));
       }
@@ -114,6 +116,8 @@ export default function HomePage() {
           />
           <Button variant='outline-secondary' id='button-addon2' onClick={e => handleAdd(e)}>add repo</Button>
         </InputGroup>
+
+        { error && <Alert className='mx-1 text-center p-1' style={{fontSize: '11pt'}} variant={'danger'}>{error}</Alert> }
 
         <Table striped bordered hover>
           <thead>

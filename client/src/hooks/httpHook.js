@@ -15,7 +15,7 @@ export default function useHttp() {
             const response = await fetch(API_URL + url, { method, body, headers });
             const data = await response.json();
 
-            if (!response.ok) throw new Error(data.errors[0].msg || `Failed to fetch ${url}`);
+            if (!response.ok) throw new Error(data.message || data.errors[0].msg  || `Failed to fetch ${url}`);
 
             setLoading(false);
             return data;

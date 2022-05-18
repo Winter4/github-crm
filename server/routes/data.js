@@ -90,8 +90,8 @@ router.get('/repos/:userId',
       let repos = [];
       data.forEach(repo => repos.push(repo.toJSON()) );
       
-      log.info('Reponse for repos GET with repos json OK');
-      return res.json(repos);
+      log.info('Response for repos GET with repos json OK');
+      return res.json(repos.sort((a, b) => a.id - b.id));
     } catch (e) {
       log.error(e.message, { route: req.url });
       res.status(500).send('Server failed');
