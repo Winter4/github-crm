@@ -26,13 +26,18 @@ router.post('/login',
       }
 
       const user = await User.findOne({ where: {'email': req.body.email} });
+      if (!user) {
+        log.info('Response for login POST with NOT_FOUND OK', { route: req.url });
+        return res.status(400).json({ message: 'Incorrect email and/or password' });
+      }
+
       if (await bcrypt.compare(req.body.password, user.password)) {
         log.info('Response for login POST with LOGINED OK', { route: req.url });
         return res.json({ id: user.id, name: user.name, email: user.email });  
       }
       else {
         log.info('Response for login POST with NOT_LOGINED OK', { route: req.url });
-        return res.status(400).send('Unexisting account');
+        return res.status(400).json({ message: 'Incorrect email and/or password' });
       }
 
     } catch (e) {

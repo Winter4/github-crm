@@ -8,23 +8,27 @@ import HomeContainer from '../wrappers/HomeContainer';
 
 export default function HomePage() {
 
-  const { user } = useAuth();
-  const nav = useNavigate(); 
-
-  useEffect(() => {
-    if (!user) nav('/login');
-  }, [user, nav]);
-
-  // - - - - - - - - - - - - - - - - -
-
+  // data manipulation funcs
   const { addRepo, getRepos, refreshRepo, deleteRepo } = useCRUD();
 
   // main data state
   const [data, setData] = useState([]);
 
+  // logged user
+  const { user, logout } = useAuth();
+  const nav = useNavigate(); 
+  
+  // this hook is called twice on page load
+  // have ideas why, but haven't enough react experience
+  // to fix it
   useEffect(() => {
-    getRepos(user).then(repos => setData(repos));
-  }, []); 
+    // browser renders this page just for a moment
+    // and then navigates to another page
+    // not exactly what i wanted but also
+    // wonder having more react experience
+    if (!user) nav('/login');
+    else getRepos(user).then(repos => setData(repos));
+  }, [user]);
 
   // - - - - - - - - - - - - - - - - -
 
@@ -101,7 +105,7 @@ export default function HomePage() {
             <span className='text-muted'>{localStorage.getItem('userEmail')}</span>
           </Navbar.Text>
         </Navbar.Collapse>
-        <Button variant={'secondary'}>Logout</Button>
+        <Button variant={'secondary'} onClick={() => logout()}>Logout</Button>
       </Navbar>
 
       <HomeContainer>

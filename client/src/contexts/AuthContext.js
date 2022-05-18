@@ -18,6 +18,11 @@ export function AuthProvider({ children }) {
     localStorage.setItem('userEmail', email);
   };
 
+  const logout = () => {
+    setUser(null);
+    localStorage.clear();
+  };
+
   const login = async (email, password) => {
     try {
       let response;
@@ -60,6 +65,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     user,
+    logout,
     login,
     register
   };
