@@ -22,5 +22,8 @@ const { user, repo } = db.models;
 user.hasMany(repo, { foreignKey: 'user_id' });
 repo.belongsTo(user, { foreignKey: 'user_id' });
 
+// creating the tables if they don't exist
+await db.sync();
+
 // exporting the DB client
 module.exports = db;
