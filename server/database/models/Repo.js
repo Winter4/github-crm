@@ -41,7 +41,6 @@ module.exports = sequelize => sequelize.define('repo', {
   user_id: {
     type: DataTypes.INTEGER(),
     allowNull: false,
-    references:'user',
   }
   
 }, {
