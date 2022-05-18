@@ -68,6 +68,8 @@ if (process.env.NODE_ENV === 'prod') {
     log.error(err.message);
   });
 
+  await db.sync();
+
   // log indicator
   const tmp = 'Logging...';
   console.log(tmp);
