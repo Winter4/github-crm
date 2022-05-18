@@ -26,6 +26,15 @@ app.use('/api/auth', require('./routes/auth'));
 // handle data routes here
 app.use('/api/data', require('./routes/data'));
 
+// sending static in prod mode
+if (process.env.NODE_ENV === 'prod') {
+  app.use(express.static(__dirname + '/client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(__dirname + '/client/build/index.html')
+  }); 
+}
+
 // ========================================
 
 // define & call start function
