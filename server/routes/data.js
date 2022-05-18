@@ -38,12 +38,12 @@ function buildRepo(repo, path, user) {
 router.post('/repo', 
   [
     body('user', 'Invalid user ID').isInt({ min: 1 }),
-    body('path', 'Invalid path').notEmpty().isString(),
+    body('path', 'Invalid path').isString().isLength({ min: 3 }),
   ],
   async (req, res) => {
     try {
-      const error = validationResult(req);
-      if (!error.isEmpty()) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
         log.info('Invalid repo fetch data', { data: req.body, errors: errors.array() });
         return res.status(400).json({
           message: 'Invalid repo fetch data',
@@ -77,7 +77,7 @@ router.get('/repos/:userId',
   ], 
   async (req, res) => {
     try {
-      const error = validationResult(req);
+      const errors = validationResult(req);
       if (!error.isEmpty()) {
         log.info('Invalid user repos fetch data', { user_id: req.params.userId, errors: errors.array() });
         return res.status(400).json({
@@ -105,7 +105,7 @@ router.put('/repo/:repoId',
   ],
   async (req, res) => {
     try {
-      const error = validationResult(req);
+      const errors = validationResult(req);
       if (!error.isEmpty()) {
         log.info('Invalid repo refresh data', { user_id: req.params.userId, errors: errors.array() });
         return res.status(400).json({
@@ -149,8 +149,8 @@ router.delete('/repo/:repoId',
   ],
   async (req, res) => {
     try {
-      const error = validationResult(req);
-      if (!error.isEmpty()) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
         log.info('Invalid repo delete data', { user_id: req.params.userId, errors: errors.array() });
         return res.status(400).json({
           message: 'Invalid repo delete data',

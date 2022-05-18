@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navbar, Button, Table, InputGroup, FormControl, Alert } from 'react-bootstrap';
 
+import { FiGithub } from 'react-icons/fi';
+import { MdOutlineRefresh, MdDelete } from 'react-icons/md';
+
 import { useAuth } from '../contexts/AuthContext';
 import { useCRUD } from '../contexts/CRUDContext';
 import HomeContainer from '../wrappers/HomeContainer';
@@ -41,6 +44,12 @@ export default function HomePage() {
   const handleAdd = async e => {
     try {
       setError(null);
+
+      if (!repoPath.current.value) {
+        setError('Repo path can\'t be empty');
+        return;
+      }
+
       if (await addRepo(user, repoPath.current.value)) {
         setData(await getRepos(user));
       }
@@ -86,8 +95,8 @@ export default function HomePage() {
         <td>{row.forks}</td>
         <td>{row.issues}</td>
         <td>{row.created}</td>
-        <td><Button onClick={e => handleRefresh(e, index)}>ref</Button></td>
-        <td><Button onClick={e => handleDelete(e, index)} variant={'danger'}>del</Button></td>
+        <td><Button onClick={e => handleRefresh(e, index)}><MdOutlineRefresh /></Button></td>
+        <td><Button onClick={e => handleDelete(e, index)} variant={'danger'}><MdDelete /></Button></td>
       </tr>
     );
   });
@@ -97,7 +106,7 @@ export default function HomePage() {
   return (
     <>
       <Navbar bg={'dark'} variant={'dark'} className='p-3'>
-        <Navbar.Brand>GitHub CRM</Navbar.Brand>
+        <Navbar.Brand><FiGithub />&nbsp;GitHub CRM</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className='justify-content-center'>
           <Navbar.Text>
@@ -123,7 +132,7 @@ export default function HomePage() {
 
         { error && <Alert className='mx-1 text-center p-1' style={{fontSize: '11pt'}} variant={'danger'}>{error}</Alert> }
 
-        <Table striped bordered hover>
+        <Table className='text-center' striped bordered hover>
           <thead>
             <tr>
               <th>#</th>

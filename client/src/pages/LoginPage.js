@@ -61,6 +61,7 @@ export default function LoginPage() {
               className='w-100 mt-2' 
               type='submit' 
               onClick={e => handleLogin(e)}
+              variant={'dark'}
             >
               Sign in
             </Button>
